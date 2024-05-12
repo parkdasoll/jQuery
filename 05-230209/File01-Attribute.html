@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - Attribute</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        .highlight {
+            color: gold;
+            border: 2px solid gold;
+        }
+    </style>
+    <script>
+        $(function(){
+            // 문서 객체의 class 속성 조작
+            //  - 관련 메서드
+            //      .addClass()
+            //          : 문서 객체에 class 속성을 추가
+            //      .removeClass()
+            //          : 문서 객체에 class 속성을 제거
+            //      .toggleClass()
+            //          : 문서 객체에 class 속성을 추가 또는 제거(추가 ↔ 제거)
+            //      .hasClass()
+            //          : 문서 객체가 가진 class 속성을 검사
+
+            $("#list1 > li").on("click", function(){
+                // 클릭한 요소를 강조
+                //  - 클릭한 요소에 highlight 클래스를 추가
+                // $(this).addClass("highlight");
+
+                // li 요소 중 클릭한 요소만 강조
+                //  - 클릭한 요소에 highlight 클래스를 추가
+                //  - 기존에 강조된 요소는 highlight 클래스를 제거
+                // $(this).addClass("highlight").siblings(".highlight").removeClass("highlight");
+
+                // 클릭한 요소가 강조되어 있으면 일반으로 하고
+                // 클릭한 요소가 일반 상태이면 강조
+                //  - 클릭한 요소에 highlight 클래스가 있으면 제거하고
+                //    클릭한 요소에 highlight 클래스가 없으면 추가
+                // if($(this).hasClass("highlight"))
+                //     $(this).removeClass("highlight");
+
+                // else
+                //     $(this).addClass("highlight");
+
+                // 클래스 설정 여부에 따라 클래스를 추가 또는 제거하는 경우
+                // 토글 기능으로 사용하는 것이 간결하다.
+                // $(this).toggleClass("highlight");
+
+                // 클릭한 요소가 강조되어 있으면 일반으로 하고
+                // 클릭한 요소가 일반 상태이면 해당 요소만 강조
+                //  - 클릭한 요소에 highlight 클래스가 있으면 제거하고
+                //    클릭한 요소에 highlight 클래스가 없으면 추가하고
+                //  - 기존에 강조된 요소에 highlight 클래스를 제거
+                $(this).toggleClass("highlight")
+                        .siblings(".highlight").removeClass("highlight");
+     
+            });
+
+            // 클래스를 조작하는 메서드 또한 인자 값으로 함수를 전달받을 수 있다.
+            //  → 각 요소마다 다른 클래스를 설정/제거할 수 있다.
+            var colorClass = ["red", "blue", "green", "yellow"];
+            $("#list1 > li").addClass(function(index, currentClass){
+                // 각 요소마다 클래스를 추가하기 위한 함수
+                // 매개변수
+                //  index           : 요소의 인덱스
+                //  currentClass    : 요소의 현재 클래스 속성 값
+                // 반환 값
+                //  요소에 추가할 클래스 속성 값(string)
+                // return "item" + (index%3);
+                return colorClass[index % colorClass.length];
+            });
+            //-----------------------------------------------------------------
+            // 문서 객체의 HTML 속성(Attribute) 조작
+            //  - 관련 메서드
+            //      .attr()
+            //          : 문서 객체의 HTML 속성(Attribute)을 설정/반환
+            //      .removeAttr()
+            //          : 문서 객체의 HTML 속성(Attribute)을 제거
+            //  - selected, checked 와 같이 속성 값이 없는 속성들은
+            //    .prop() 를 사용하는 것을 권장
+
+
+            // HTML 속성 반환
+            // .attr(attrName)
+            //  → 다수의 요소를 포함한 jQuery 객체에서 호출한 경우
+            //    첫 번째 요소의 속성 값만 반환
+            var htmlTitle = $("#html").attr("title");
+            console.log("HTML's Title : " + htmlTitle);
+
+            // HTML 속성 설정
+            //  .attr(attrName, value)
+            //  .attr(attrObject)       <attrName-value object>
+            //  .attr(attrName, function(index, value))
+            //      → 각 요소마다 속성 값을 설정
+            //      → 각 요소의 속성 값을 활용
+
+            $("#css").attr("title", "Cascading Style Sheet");
+
+            // 다수의 요소에 속성을 설정할 때 사용되는 메서드지만
+            // 다수의 요소에 속성 값을 다룰 때도 사용된다.
+            $("#list2 > li").attr("title", function(index, value){
+                console.log(">>> " + value);
+
+                // 원래 기능이 속성을 설정하기 위한 메서드이기 때문에
+                // 속성 값만 다룰 경우 반환 값을 지정하지 않는 것이 좋다.
+                return;
+            });
+        });
+    </script>
+</head>
+<body>
+    <ul id="list1" class="gray-box">
+        <li>Item A</li>
+        <li>Item B</li>
+        <li>Item C</li>
+        <li>Item D</li>
+        <li>Item E</li>
+    </ul>
+    <hr>
+    <ul id="list2" class="gray-box">
+        <li id="html" title="Hyper Text Markup Language">HTML</li>
+        <li id="css">CSS</li>
+    </ul>
+</body>
+</html>

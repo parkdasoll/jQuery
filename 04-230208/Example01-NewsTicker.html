@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - NewsTicker</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #news-ticker {
+            width: 600px;
+            height: 2em;
+            border: 5px solid gold;
+            margin: 0 auto;
+
+            overflow: hidden;
+        }
+
+        #news-ticker > ul {
+            position: relative;
+            top: 0; bottom: 0;
+        }
+        #news-ticker > ul > li {
+            height: 2em;
+            line-height: 2em;
+            padding: 0 1rem;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <script>
+        $(function(){
+            var $newsComments = $("#news-ticker > ul");
+            var delay = 2000;
+
+            // #news-ticker > ul 요소의 자식 요소의 수
+            var commentCount = $newsComments.children().length;
+
+            // 화면에 보여질 문구의 인덱스
+            var i = 1;
+
+            window.setInterval(function(){
+                $newsComments.css("top", (i * -100) + "%");
+                i++;
+                // top : -100%
+                // top : -200%
+                // top : -300%
+                // top : -400%
+
+                // if(i == commentCount) i = 0;
+                i %= commentCount;
+            }, delay);
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <div id="news-ticker">
+            <ul>
+                <li>1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                <li>2. Pellentesque sodales libero sed ex laoreet dapibus.</li>
+                <li>3. Quisque ultrices metus ac nisi pharetra, at rhoncus lorem semper.</li>
+                <li>4. Mauris rhoncus nulla et velit ultricies, ac luctus erat vulputate.</li>
+                <li>5. Pellentesque et tellus in diam rutrum aliquam.</li>
+            </ul>
+        </div> <!-- /#news-ticker -->
+    </div> <!-- /.gray-box -->
+</body>
+</html>

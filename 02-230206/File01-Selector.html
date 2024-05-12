@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - selector</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <!-- jQuery CDN -->
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #hello {
+            /* visibility: hidden; */
+            display: none;
+        }
+    </style>
+    <script>
+        $(function(){
+            // document 객체의 ready 이벤트 핸들러
+            //  - 브라우저가 HTML 문서를 읽고 해석한 다음 
+            //    DOM 구축을 끝낸 이후에 발생하는 이벤트
+            //  - DOM 구축이 끝난 시점이기 때문에 
+            //    모든 요소에 접근하여 조작할 수 있다.
+            //-------------------------------------------------
+
+            // 선택자(selector)
+            //  - CSS 에서 사용하던 선택자 모두 사용이 가능
+            //  - 추가적으로 jQuery 에서 추가된 '필터 선택자(Filter Selector)' 가 있다.
+
+            // 필터 선택자(Filter Selector)
+            //  - 선택된 요소들 중 원하는 요소를 선택하기 위해 필터링하는 선택자
+            //  - ':' 문자로 시작하는 선택자
+            //  - 번호와 관련된 선택자 같은 경우 '시작 번호가 0' 이다.
+            //    즉, 사용되는 번호가 인덱스(index) 이다.
+            //  - 종류
+            //      1. 입력 양식 필터 선택자
+            //          : 입력 요소의 type 또는 상태에 따라 선택하는 선택자
+            //      2. 함수 필터 선택자
+            //          : 함수 형태의 선택자
+            //      3. 위치 필터 선택자
+            //          : 위치와 관련된 선택자
+            //--------------------------------------------------------------------
+
+            // 입력 양식 필터 선택자
+            var $submit = $("#submit");
+            $submit.on("click", function(){
+                // #favorites 요소 내의 선택된 option 요소를 선택
+                var $seleted = $("#favorites > option:selected");
+
+                // 선택된 요소의 내부 문자를 알림창으로 출력
+                //  - 내부 문자 : .html()
+                window.alert("selected item : " + $seleted.html() );
+            });
+            //-----------------------------------------------------------
+            // 함수 필터 선택자
+            //  - :eq(n)
+            //      → n 번째에 위치한 요소를 선택
+            //  - :lt(n)
+            //      → n 번째 이전에 위치한 요소를 선택
+            //  - :gt(n)
+            //      → n 번째 이후에 위치한 요소를 선택
+            //  → 선택된 요소들 중 선택된 순서에 따라 선택된다.
+            //  → n 의 시작 값은 0 부터 이다.
+
+            // 필터 선택자와 구조 선택자의 차이
+            //  - 필터 선택자
+            //      : 선택된 요소들 중 요소를 필터링하여 선택
+            //  - 구조 선택자
+            //      : DOM 에서 형제 요소들 중에서 지정된 위치에 있는 요소를 선택
+
+            var $items1 = $("#list1 > li");
+            console.log("#list1 > li");
+            console.log($items1);
+
+            // 구조 선택자
+            var $nthItem = $("#list1 > li:nth-child(2)");
+            console.log("#list1 > li:nth-child(2)");
+            console.log(" >>> " + $nthItem.html() );
+            // → 형제 요소들 중 두 번째 요소가 선택된다.
+            
+            var $nthItem2 = $("#list1 > #item2:nth-child(2)");
+            console.log("#list1 > #item2:nth-child(2)");
+            console.log(" >>> " + $nthItem2.html() );
+            // → id 속성이 'item2' 이면서 형제 요소들 중 두번째에 위치한 요소를 선택
+
+            // 필터 선택자
+            var $eqItem = $("#list1 > li:eq(2)");
+            console.log("#list1 > li:eq(2)");
+            console.log(" >>> " + $eqItem.html() );
+            // → 선택된 li 요소들 중 인덱스가 2인 요소를 선택
+            
+            var $eqItem2 = $("#list1 > #item3:eq(2)");
+            console.log("#list1 > #item3:eq(2)");
+            console.log(" >>> " + $eqItem2.html() );
+            // → '#list1 > #item3' 에서 탐색된 요소가 하나이기 때문에
+            //    이후 요소가 없다.
+            // → 따라서 선택된 요소가 없기 때문에 'undefined' 가 출력
+            //----------------------------------------------------------------
+            // 부모 요소가 다른 요소들을 한 번에 탐색
+            var $list = $(".list > li");
+            console.log(".list > li");
+            console.log($list);
+
+            // 구조 선택자
+            $(".list > li:nth-child(2)").css("color", "red");
+            // 형제 요소들 중 두 번째에 위치한 요소를 선택
+
+            // 필터 선택자
+            var n = 7;
+            // 선택된 모든 li 요소들 중 인덱스가 n 인 요소를 선택
+            $(".list > li:eq(" + n + ")").css("color", "orange");
+            
+            // 선택된 요소들 중 n 번째 이전에 위치한 요소를 선택
+            $(".list > li:lt(" + n + ")").css("backgroundColor", "yellowgreen");
+            
+            // 선택된 요소들 중 n 번째 이후에 위치한 요소를 선택
+            $(".list > li:gt(" + n + ")").css("backgroundColor", "blueviolet");
+
+            // 선택된 요소들 중 첫 번째 요소를 선택
+            $(".list > li:first").css("color", "navy");
+
+            // 선택된 요소들 중 마지막 요소를 선택
+            $(".list > li:last").css("color", "navy");
+            
+            // 선택된 요소들 중 짝수 번째 요소를 선택
+            $(".list > li:even").css("paddingLeft", "16px");
+
+            // 선택된 요소들 중 홀수 번째 요소를 선택
+            $(".list > li:odd").css("textDecoration", "underLine");
+            //--------------------------------------------------------------------
+            // :eq(), lt(), gt() 선택자에 인덱스로 지정되는 값에
+            // 음수도 지원한다.
+            //  - 음수를 지정할 경우 뒤에서 n 번째 요소를 선택
+            //  - 마지막 요소를 기준으로 요소를 선택할 때 사용
+
+            // 뒤에서 3번째 요소를 선택
+            $("#list3 > li:eq(-3)").css("color", "red");
+
+            // 뒤에서 3번째 이전 요소를 선택
+            //  - 먼저 선택된 요소를 선택
+            //  - 지정된 값보다 작은 인덱스인 요소를 선택
+            $("#list3 > li:lt(-3)").css("color", "navy");
+            
+            // 뒤에서 3번째 이후 요소를 선택
+            //  - 나중에 선택된 요소를 선택
+            //  - 지정된 값보다 큰 인덱스인 요소를 선택
+            $("#list3 > li:gt(-3)").css("color", "gold");
+            //--------------------------------------------------------------------
+
+            // 화면 표시 선택자
+            //  - :visible
+            //      → 브라우저 화면에 보여지는 요소를 선택
+            //  - :hidden
+            //      → 브라우저 화면에 숨겨진 요소를 선택
+            //  → visibility 스타일 속성과 opecity 스타일 속성은 영향을 주지 않는다.
+            //    즉, 'visibility:hidden' 으로 설정해도 영역을 그대로 차지하기 때문에
+            //    보이는 것으로 간주한다.
+            //  → display 스타일 속성의 값에 의해 선택된다.
+
+            var $hello = $("#hello:hidden");
+            console.log("#hello:hidden = " + $hello.html() );
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <select name="favorites" id="favorites">
+            <option value="Apple">Apple</option>
+            <option value="Bag">Bag</option>
+            <option value="Cat">Cat</option>
+            <option value="Dog">Dog</option>
+            <option value="Elephant">Elephant</option>
+        </select>
+        <button id="submit">OK</button>
+    </div>
+    <hr>
+    <ul id="list1" class="gray-box list">
+        <li id="item1">Item 1</li>
+        <li id="item2">Item 2</li>
+        <li id="item3">Item 3</li>
+        <li id="item4">Item 4</li>
+        <li id="item5">Item 5</li>
+    </ul>
+    <ul id="list2" class="gray-box list">
+        <li id="item6">Item 6</li>
+        <li id="item7">Item 7</li>
+        <li id="item8">Item 8</li>
+        <li id="item9">Item 9</li>
+        <li id="item10">Item 10</li>
+    </ul>
+    <hr>
+    <ul id="list3" class="gray-box">
+        <li>Item 1</li> <!-- index : 0, -5 -->
+        <li>Item 2</li> <!-- index : 1, -4 -->
+        <li>Item 3</li> <!-- index : 2, -3 -->
+        <li>Item 4</li> <!-- index : 3, -2 -->
+        <li>Item 5</li> <!-- index : 4, -1 -->
+    </ul>
+    <hr>
+    <div id="hello" class="gray-box">Hello Wolrd!</div>
+    <hr>
+</body>
+</html>

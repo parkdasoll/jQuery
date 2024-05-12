@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - Attribute</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <script>
+        $(function(){
+
+            // .data() 메서드
+            //  - HTML5 에서의 사용자 정의 데이터 속성을 설정/반환하기 위한 메서드
+            //  - .data() 메서드를 통해 데이터 속성을 설정할 때
+            //    HTML 속성으로 추가되는 것이 아닌 요소 객체에 추가된다.
+            //      → HTML 속성으로 추가 된 것이 아니기 때문에
+            //        속성 조작 관련해서 오류가 발생할 수 있다.
+
+            var $html = $("#html");
+            console.log("HTML's mean : " + $html.data("mean"));
+            console.log("HTML's mean : " + $html.attr("data-mean"));
+            // attr() : HTML 속성(Attribute)을 설정/반환하기 위한 메서드
+
+            var $css = $("#css");
+            $css.data("mean", "Cascading Style Sheet");
+            console.log("CSS's mean : " + $css.data("mean"));
+            console.log("CSS's mean : " + $css.attr("data-mean"));
+        });
+    </script>
+</head>
+<body>
+    <h1 id="html" class="gray-box" data-mean="Hypter Text Markup Langauge">HTML</h1>
+    <h1 id="css" class="gray-box">CSS</h1>
+</body>
+</html>

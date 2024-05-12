@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Dropdown</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #header > h1 {
+            font-size: 2.4em;
+            font-weight: bold;
+            padding: 1em;
+            text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #nav {
+            background-color: #333;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+        }
+        #nav::after {content: ""; display: block; clear: both;}
+        #nav > ul.nav-service { float: left;}
+        #nav > ul.nav-auth { float: right;}
+        #nav > ul > li {
+            float: left;
+            /* .dropdown 요소의 기준 영역으로 지정하기 위해 position 속성을 설정 */
+            position: relative;
+        }
+        #nav > ul > li > a {
+            display: block;
+            padding: 1.2em 2em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+
+            transition-duration: 100ms;
+        }
+        #nav > ul > li > a:hover {
+            background-color: yellowgreen;
+            color: navy;
+        }
+
+        /* 드롭 다운 */
+        .dropdown {
+            /* 상위 요소인 li 요소의 영역을 기준으로 아래에 배치 */
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+
+            background-color: #555;
+            padding: 0.4em 1em;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+
+            /* 기본 상태가 화면에 숨겨진 상태이므로 */
+            /* display 속성을 통해 숨겨준다. */
+            display: none;
+        }
+        .dropdown.on { display: block;}
+        .dropdown > li > a {
+            display: block;
+            padding: 0.5em;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        #wrap-container {overflow: hidden;}
+        #sidebar {
+            width: 200px;
+            float: left;
+        }
+        #sidebar > ul > li > a {
+            display: block;
+            padding: 1em;
+            color: black;
+            text-decoration: none;
+        }
+        #sidebar > ul > li > a:hover {
+            background-color: #ccc;
+        }
+        #wrap {
+            width: 100%;
+            float: left;
+            margin-right: -200px;
+        }
+        #content {
+            margin-right: 200px;
+            padding: 1em;
+            border-left: 1px solid #999;
+        }
+        #content > h2 {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 0.7em;
+        }
+        #content > p {
+            line-height: 1.6;
+            margin-bottom: 1em;
+        }
+        #content > p:last-child {margin-bottom: 0;}
+        #footer {
+            height: 100px;
+            border-top: 1px solid #999;
+            position: relative
+        }
+        #footer > .copyright {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+    <script>
+        $(function(){
+            // document 객체의 ready 이벤트 핸들러
+
+            // 0. 요소 탐색 및 변수 선언
+            // 1. #nav 하위 요소인 a 요소를 클릭했을 때 
+            // 2. 클릭한 요소의 드롭 다운이 숨겨져 있으면 
+            // 2-1. 기존에 보이던 드롭 다운을 숨긴다.
+            // 2-2 해당 드롭 다운을 보이게 한다.
+            // 3. 클릭한 요소의 드롭 다운이 보여지고 있으면 
+            // 3-1. 해당 드롭 다운을 숨긴다.
+            //--------------------------------------------------
+            // 0. 요소 탐색 및 변수 선언
+            var $navMenu = $("#nav > ul > li > a");
+            var $dropdowns = $(".dropdown");
+
+            // 1. #nav 하위 요소인 a 요소를 클릭했을 때 
+            $navMenu.on("click", function(){
+
+                // 클릭한 요소의 드롭 다운
+                var $next = $(this).next(".dropdown");
+                // → HOME, LOG IN, SIGN UP 과 같이 드롭 다운이 없는 경우
+                //   아무 요소가 없는 jQuery 객체가 만들어진다.
+                // → 아무 요소가 없으면 어떤 검사를 해도 결과가 false 이다.
+
+                // 드롭 다운이 없는 경우
+                // 모든 드롭 다운을 숨기고 함수를 즉시 종료
+                if($next.length == 0) {
+                    $dropdowns.removeClass("on");
+                    return;
+                }
+
+                // 2. 클릭한 요소의 드롭 다운이 숨겨져 있으면 
+                // if($next.is(":hidden")) {
+
+                /* if(!$next.hasClass("on")){
+                    // 2-1. 기존에 보이던 드롭 다운을 숨긴다.
+                    $dropdowns.removeClass("on");
+
+                    // 2-2 해당 드롭 다운을 보이게 한다.
+                    $next.addClass("on");
+                    // $dropdowns.removeClass("on").$next.addClass("on");
+
+                }
+                // 3. 클릭한 요소의 드롭 다운이 보여지고 있으면 
+                else {
+                    // 3-1. 해당 드롭 다운을 숨긴다.
+                    $next.removeClass("on");
+                }
+                */
+
+                // 2. 클릭한 요소의 드롭 다운이 숨겨져 있으면 
+                // 2-1. 기존에 보이던 드롭 다운을 숨긴다.
+                // if($next.is(":hidden"))
+                if(!$next.hasClass("on"))
+                    $dropdowns.removeClass("on");
+
+                $next.toggleClass("on");
+            });
+        });
+    </script>
+</head>
+<body>
+    <header id="header">
+        <h1>Fluid Layout - Dropdown</h1>
+    </header>
+    <nav id="nav"> 
+        <ul class="nav-service">
+            <li><a href="#home">HOME</a></li>
+            <li>
+                <a href="#html">HTML</a>
+                <ul class="dropdown">
+                    <li><a href="#html-tutorial">Tutorial</a></li>
+                    <li><a href="#html-reference">Reference</a></li>
+                    <li><a href="#html-examples">Examples</a></li>
+                    <li><a href="#html-faq">FAQ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#css">CSS</a>
+                <ul class="dropdown">
+                    <li><a href="#css-tutorial">Tutorial</a></li>
+                    <li><a href="#css-reference">Reference</a></li>
+                    <li><a href="#css-examples">Examples</a></li>
+                    <li><a href="#css-faq">FAQ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#javascript">JavaScript</a>
+                <ul class="dropdown">
+                    <li><a href="#js-tutorial">Tutorial</a></li>
+                    <li><a href="#js-reference">Reference</a></li>
+                    <li><a href="#js-examples">Examples</a></li>
+                    <li><a href="#js-faq">FAQ</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#jquery">jQuery</a>
+                <ul class="dropdown">
+                    <li><a href="#jquery-tutorial">Tutorial</a></li>
+                    <li><a href="#jquery-reference">Reference</a></li>
+                    <li><a href="#jquery-examples">Examples</a></li>
+                    <li><a href="#jquery-faq">FAQ</a></li>
+                </ul>
+            </li>
+        </ul>   <!-- /.nav-service -->
+
+        <ul class="nav-auth">
+            <li><a href="#login">LOG IN</a></li>
+            <li><a href="#signup">SIGN UP</a></li>
+        </ul>   <!-- /.nav-auto -->
+    </nav>
+
+    <div id="wrap-container">
+        <aside id="sidebar">
+            <ul>
+                <li><a href="#tutorial">Tutorial</a></li>
+                <li><a href="#reference">Reference</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </aside>
+
+        <div id="wrap">
+            <article id="content">
+                <h2>What is Lorem Ipsum?</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem nulla, semper faucibus convallis nec, vulputate sit
+                amet quam. Vestibulum at turpis eget urna lobortis dignissim ut blandit tortor. Aliquam facilisis lacinia urna, eget
+                lobortis ante maximus commodo. Etiam sagittis libero id est aliquam mattis. Cras scelerisque lorem nunc, sit amet
+                pellentesque lorem congue et. Vivamus ullamcorper cursus quam, ac sollicitudin ex hendrerit quis. Suspendisse potenti.
+                </p>
+
+                <p>Nullam eu maximus risus. Aenean pharetra diam ut turpis ornare, in vulputate metus mollis. Curabitur aliquet odio non
+                posuere finibus. Aenean vel pretium felis. Donec varius tincidunt mollis. Aliquam luctus viverra tempus. Mauris congue
+                risus quis turpis pulvinar tempus. Donec vitae accumsan lacus, sit amet lobortis purus. In hac habitasse platea
+                dictumst. Quisque urna lacus, luctus et odio sed, elementum mattis tortor. Cras laoreet dolor lorem, tincidunt mollis
+                urna maximus tempor. Aenean at ultrices massa. Ut aliquet imperdiet orci at accumsan.
+                </p>
+
+                <p>Morbi erat sem, efficitur quis mauris sit amet, ultrices elementum felis. Vivamus feugiat velit quis neque congue, id
+                tristique sapien pellentesque. Nunc luctus nulla vitae nibh consectetur placerat. Cras sed ante ac augue consectetur
+                lacinia. Ut accumsan suscipit mi vitae gravida. Fusce lobortis accumsan lacus sit amet malesuada. In placerat aliquet
+                quam at feugiat.
+                </p>
+            </article>
+        </div>  <!-- /#wrap -->
+    </div>  <!-- /#wrap-container -->
+
+    <footer id="footer">
+        <div class="copyright">&copy; 2022-2023 SBS Academy Gwangju</div>
+    </footer>
+</body>
+
+</html>

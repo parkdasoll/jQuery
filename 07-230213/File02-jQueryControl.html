@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - jQuery Control</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        .buttons { width: max-content; margin: 0 auto; }
+        .buttons > button {font-size: 0.7em;}
+        .gray-box > ul {
+            border: 5px solid yellowgreen;
+            margin: 10px 0;
+        }
+
+        .gray-box > ul > .apple {
+            border: 3px solid white;
+            margin: 10px;
+            padding: 0 1em;
+        } 
+
+        .gray-box > ul > .apple.prepend {border-color: orange;}
+        .gray-box > ul > .apple.append {border-color: blueviolet;}
+        .apple.before {border-color: cyan;}
+        .apple.after {border-color: pink;}
+    </style>
+    <script>
+        $(function(){
+            // 문서 객체 조작
+            //  - 문서 객체 생성
+            //  - 문서 객체 삽입
+            //  - 문서 객체 이동
+            //  - 문서 객체 복사
+            //  - 문서 객체 제거
+            //--------------------------------------------------------------
+            
+            // 문서 객체 생성
+            //  - jQuery 함수를 통해 새로운 요소를 생성
+            //  - DOM 에 생성되는 것이 아니기 때문에 화면에 바로 보여지지 않는다.
+
+            var $newHeader = $("<h1 class = 'gray-box'>문서 객체 생성</h1>")
+            .attr("title", "New Header!")
+            .prependTo("body");  // body 요소의 첫 번째 자식 요소로 추가
+            // $("body").append($newHeader);
+
+            //-----------------------------------------------------------------------
+
+            // 문서 객체 삽입
+            //  - 문서 객체를 다른 문서 객체를 기준으로 삽입하는 메서드
+            //  - 선택된 문서 객체의 기준에 따라 두 가지 형테로 나뉜다.
+            //      1. 선택한 문서 객체를 특정 요소에 삽입
+            //          ex) '사과'를 '바구니'에 담는다.
+            //      2. 선택한 문서 객체에 특정 요소를 삽입
+            //          ex) '바구니'에 '사과'를 담는다.
+            //      → 선택된 문서 객체가 무엇인지에 따라,
+            //        삽입 메서드 이후에 어떤 요소를 다루는지에 따라 
+            //  - 삽입할 수 있는 위치
+            //      1. prepend  : 첫 번째 자식 요소
+            //      2. append   : 마지막 자식 요소
+            //      3. before   : 이전 형제 요소
+            //      4. after    : 다음 형제 요소
+            //  - 형태와 위치에 따른 메서드가 총 8개다.
+
+            // 1. 선택한 문서 객체를 특정 요소에 삽입
+            //      target : selector, selention, element, elementArray, htmlString
+            //      .prependTo(target)
+            //          : 선택된 문서 객체를 terget 의 첫 번째 자식 요소로 삽입
+            //      .appendTo(target)
+            //          : 선택된 문서 객체를 terget 의 마지막 자식 요소로 삽입
+            //      .insertBefore(target)
+            //          : 선택된 문서 객체를 terget 의 이전 형제 요소로 삽입
+            //      .insertAfter(target)
+            //          : 선택된 문서 객체를 terget 의 다음 형제 요소로 삽입
+            var num1 = 1;
+            // 첫 번째 자식 요소를 추가
+            $("#prependTo").on("click", function(){
+                $("<li></li>")
+                    .html("prepend #" + num1)
+                    .addClass("apple prepend")
+                    .prependTo("#basket1");
+                num1++;
+            });
+            // 마지막 자식 요소를 추가
+            $("#appendTo").on("click", function(){
+                $("<li></li>")
+                    .html("append #" + num1)
+                    .addClass("apple append")
+                    .appendTo("#basket1");
+                num1++;
+            });
+            // 이전 형제 요소를 추가
+            $("#insertBefore").on("click", function(){
+                $("<ul></ul>")
+                    .html("before #" + num1)
+                    .addClass("apple before")
+                    .insertBefore("#basket1");
+                num1++;
+            });
+            // 다음 형제 요소를 추가
+            $("#insertAfter").on("click", function(){
+                $("<ul></ul>")
+                    .html("after #" + num1)
+                    .addClass("apple after")
+                    .insertAfter("#basket1");
+                num1++;
+            });
+
+            // 2. 선택된 문서 객체에 특정 요소를 삽입
+            //      content : selection, element, elementArray, text, htmlString
+            //      .prepend(content)
+            //          : 선택된 문서 객체의 첫 번째 자식 요소로 content 를 삽입
+            //      .append(content)
+            //          : 선택된 문서 객체의 마지막 자식 요소로 content 를 삽입
+            //      .before(content)
+            //          : 선택된 문서 객체의 이전 형제 요소로 content 를 삽입
+            //      .after(content)
+            //          : 선택된 문서 객체의 다음 형제 요소로 content 를 삽입
+            //      → 인자 값으로 함수를 전달하면 각 선택된 요소마다
+            //        다른 요소(내부 문자)를 삽입할 수 있다.
+            
+            var $basket2 = $("#basket2");
+            var num2 = 1;
+
+            // #basket2 요소의 첫 번째 자식 요소로 추가
+            $("#prepend").on("click", function(){
+                $basket2.prepend("<li class='apple prepend'>prepend#"+num2+"</li>")
+                num2++;
+            });
+
+            // #basket2 요소의 마지막 자식 요소로 추가
+            $("#append").on("click", function(){
+                var $apple = $("<li></li>")
+                                .addClass("apple append")
+                                .html("append #" + num2);
+                num2++;
+
+                $basket2.append($apple);
+            });
+
+            // #basket2 요소의 이전 형제 요소로 추가
+            $("#before").on("click", function(){
+                $basket2.before( $("<ul></ul>").addClass("apple before").html("before #" + num2) );
+                num2++;
+            });
+
+            // #basket2 요소의 다음 형제 요소로 추가
+            $("#after").on("click", function(){
+                var $apple = $("<ul></ul>")
+                            .addClass("apple after")
+                            .html("after #" + num2);
+                num2++;
+
+                $basket2.after($apple);
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <h1>1. 선택된 문서 객체를 특정 요소에 삽입</h1>
+        <div class="buttons">
+            <button id="prependTo">.prependTo(target)</button>
+            <button id="appendTo">.appendTo(target)</button>
+            <button id="insertBefore">.insertBefore(target)</button>
+            <button id="insertAfter">.insertAfter(target)</button>
+        </div>  <!-- /.buttons -->
+        <hr>
+
+        <!-- bofore                  : basket1 의 이전 형제 요소 -->
+        <ul id="basket1">
+            <!-- prepend             : basket1 의 첫 번째 자식 요소 -->
+            <li class="apple">BASE LINE</li>
+            <!-- append              : basket1 의 마지막 자식 요소 -->
+        </ul>
+        <!-- after                   : basket1 의 다음 형제 요소 -->
+
+    </div>  <!-- /.gray-box -->
+    <div class="gray-box">
+        <h1>2. 선택된 문서 객체에 특정 요소를 삽입</h1>
+        <div class="buttons">
+            <button id="prepend">.prepend(content)</button>
+            <button id="append">.append(content)</button>
+            <button id="before">.before(content)</button>
+            <button id="after">.after(content)</button>
+        </div>  <!-- /.buttons -->
+        <hr>
+
+        <!-- bofore                  : basket2 의 이전 형제 요소 -->
+        <ul id="basket2">
+            <!-- prepend             : basket2 의 첫 번째 자식 요소 -->
+            <li class="apple">BASE LINE</li>
+            <!-- append              : basket2 의 마지막 자식 요소 -->
+        </ul>
+        <!-- after                   : basket2 의 다음 형제 요소 -->
+
+    </div>  <!-- /.gray-box -->
+</body>
+</html>

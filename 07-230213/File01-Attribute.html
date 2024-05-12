@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - Attribute</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #box1 {
+            width: 100px;
+            height: 100px;
+            padding: 50px;
+            border: 20px solid yellowgreen;
+            margin: 30px;
+
+            background-color: orange;
+        }
+
+        #box2 {
+            width: 100px;
+            height: 100px;
+            background-color: yellowgreen;
+            margin: 50px;
+            position: relative;
+            left: 100px;
+            border: 10px solid orangered;
+        }
+    </style>
+    <script>
+        $(function(){
+
+            // HTML 요소의 크기와 관련된 메서드
+            //  - width()
+            //      : 요소의 컨텐츠 영역의 너비
+            //  - height()
+            //      : 요소의 컨텐츠 영역의 높이
+            //  - innerwidth()
+            //      : 요소의 내부 여백(padding)까지의 너비
+            //  - innerheight()
+            //      : 요소의 내부 여백(padding)까지의 높이
+            //  - outerwidth()
+            //      : 요소의 테두리 또는 외부 여백(margin)까지의 너비
+            //  - outerheight()
+            //      : 요소의 테두리 또는 외부 여백(margin)까지의 높이
+            //      : 인자 값으로 외부 여백까지 포함할 것인지 논리 값으로 전달
+            //          true  : 외부 여백까지의 크기
+            //          false : 테두리까지의 크기, 기본 값
+            //  - 크기 관련 메서드를 통해 크기를 설정할 경우
+            //    내부 여백, 테두리, 외부 여백은 고정이고
+            //    컨텐츠 영역의 크기만 설정된 크기에 맞춰 설정된다.
+
+            $("#comment1").html(function(){
+                var $box1 = $("#box1");
+
+                var comment = "";
+
+                // 컨텐츠 영역의 크기
+                comment += "#box1's width = " + $box1.width() + "<br>";
+                comment += "#box1's height = " + $box1.height() + "<br>";
+                // 내부 여백까지의 크기
+                comment += "#box1's innerWidth = " + $box1.innerWidth() + "<br>";
+                comment += "#box1's innerHeight = " + $box1.innerHeight() + "<br>";
+                // 테두리까지의 크기
+                comment += "#box1's outerWidth = " + $box1.outerWidth() + "<br>";
+                comment += "#box1's outerHeight = " + $box1.outerHeight() + "<br>";
+                // 외부여백까지의 크기
+                comment += "#box1's outerWidth with margin  = " + $box1.outerWidth(true) + "<br>";
+                comment += "#box1's outerHeight with margin = " + $box1.outerHeight(true) + "<br>";
+
+                $box1.outerWidth(350);
+                // 테두리 까지의 너비를 350px 로 설정
+                // 이때 테두리와 내부 여백의 너비는 고정
+
+                $box1.outerHeight(250, true);
+                // 외부 여백까지의 높이를 250px로 설정
+                // 이때 외부 여백, 테두리, 내부 여백의 높이는 고정
+
+                return comment
+            });
+
+
+            // HTML 요소의 위치와 관련된 메서드
+            //  - offset()
+            //      : HTML 문서를 기준으로 한 위치 정보를 가진 객체를 반환
+            //      : 요소의 테두리까지의 거리
+            //  - offsetParent()
+            //      : 요소의 첫 번째 부모 요소를 jQuery 객체로 반환
+            //      : position 속성의 값이 'relative', 'absolute', 'fixed' 인 상위 요소
+            //  - position()
+            //      : 요소의 offsetParent() 인 상위 요소를 기준으로 한
+            //        위치 정보를 가진 객체를 반환
+            //      : 요소의 외부 여백까지의 거리
+
+            $("#comment2").html(function(){
+
+                var $box2 = $("#box2");
+
+                var comment = "";
+                
+                // HTML 문서에서 요소의 테두리까지의 거리
+                comment += "offset top of #box2 = " + $box2.offset().top + "<br>";
+                comment += "offset left of #box2 = " + $box2.offset().left + "<br>";
+                
+                var $offsetParent = $box2.offsetParent();   // HTML 요소
+                comment += "offset parent = " + $offsetParent.get(0).tagName + "<br>";
+                
+                // offsetParent 요소에서 요소의 외부 여백까지의 거리
+                comment += "position top of #box2 = " + $box2.position().top + "<br>";
+                comment += "position left of #box2 = " + $box2.position().left + "<br>";
+                
+                $("#container1").css("position", "relative");
+                
+                var $offsetParent = $box2.offsetParent();   // #container1
+                comment += "offset parent = #" + $offsetParent.get(0).id + "<br>";
+                
+                // offsetParent 요소에서 요소의 외부 여백까지의 거리
+                comment += "position top of #box2 = " + $box2.position().top + "<br>";
+                comment += "position left of #box2 = " + $box2.position().left + "<br>";
+
+
+                return comment;
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <div id="box1"></div>
+        <hr>
+        <p id="comment1"></p>
+    </div>
+    <hr>
+    <div id="container1" class="gray-box">
+        <div id="box2"></div>
+        <hr>
+        <p id="comment2"></p>
+    </div>
+</body>
+</html>

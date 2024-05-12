@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - Traversal Method</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <script>
+        $(function(){
+            // document 객체의 ready 이벤트 핸들러
+
+            // DOM 트리 탐색 메서드
+            //  형제 기준 탐색 메서드
+            //      .siblings()     : 선택한 요소의 형제 요소를 선택
+            //      .next()         : 선택한 요소의 바로 다음 형제 요소를 선택
+            //      .nextAll        : 선택한 요소의 다음 형제 요소들을 선택
+            //      .prev()         : 선택한 요소의 바로 이전 형제 요소를 선택
+            //      .prevAll()      : 선택한 요소의 이전 형제 요소들을 선택
+            //      → 메서드의 인자로 선택자를 지정할 수 있으며 
+            //        선택된 형제 요소들 중 선택자에 해당하는 요소를 최종으로 선택한다.
+
+            var $selected = $("#list1 > .selected");
+
+            // 선택된 요소
+            $selected.css("color", "gold");
+
+            // 선택된 요소의 다음 형제 요소
+            $selected.next().css("fontStyle", "italic");
+
+            // 선택된 요소의 이전 형제 요소
+            $selected.prev().css("textDecoration", "underLine");
+
+            // 선택된 요소의 다음 형제 요소들
+            $selected.nextAll().css("color", "yellowgreen");
+
+            // 선택된 요소의 이전 형제 요소들
+            $selected.prevAll().css("color", "orangered");
+            //--------------------------------------------------------------
+            // :lt, :gt 선택자 와 .prevAll(), nextAll() 메서드
+
+            // :lt, :gt 선택자
+            //  - 탐색된 요소들을 기준으로 특정 인덱스의 이전, 이후 요소를 선택
+            //  - 형제 요소 외의 다른 요소들까지 탐색된 요소에 포함되어있다면
+            //    선택자에 의해 선택될 수 있다.
+            //  - :lt 선택자는 첫 번째 요소부터 지정된 위치 전까지의 요소를 선택
+            //  - :gt 선택자는 지정된 위치 앞부터 마지막 요소까지 선택
+
+            // .prevAll(), nextAll() 메서드
+            //  - 탐색된 요소의 DOM 을 기준으로 이전 형제, 다음 형제 요소들을 탐색
+            //  - .prevAll() 메서드는 기준 요소의 이전 형제 요소부터 요소를 선택
+            //  - .nextAll() 메서드는 기준 요소의 다음 형제 요소부터 요소를 선택
+
+            // .item-3 요소를 기준으로 이전에 있는 요소들을 선택
+            var $items2 = $("#list2 > li");
+
+            // .item-3 요소를 기준으로 이전에 있는 요소들을 선택
+
+            // :lt 선택자를 이용
+            var $lt = $items2.filter(":lt(3)").css("color", "orange");
+
+            // .prevAll 메서드를 이용
+            var $prev = $items2.eq(3).css("color", "yellowgreen")
+                        .prevAll().css("textDecoration", "underLine");
+
+            console.log("$lt");
+            console.log($lt);
+            // → 첫 번째 요소부터 저장된다.
+            
+            console.log("$prev");
+            console.log($prev);
+            // → 기준 요소의 이전 형제 요소부터 저장된다.
+            //----------------------------------------------------------------
+            // .filter() 메서드
+            //  - jQuery 객체 내의 요소들 중 특정 요소를 선택하기 위한 메서드
+            //  - 인자 값으로 함수를 전달할 경우
+            //    각 요소마다 원하는 로직으로 요소를 선택할 수 있다.
+            //      → jQuery 객체의 메서드 중 값을 설정하는 메서드와
+            //        검사를 하기 위한 메서드의 대부분이 함수를 인자로 받는다.
+            //        ex) 각 요소마다 다른 값을 설정하기 위해
+            //            각 요소마다 원하는 로직으로 검사하기 위해
+            //      → 함수를 인자로 받는 경우 이를 각 요소마다 함수를 수행시킨다.
+            //      → jQuery 객체 내에 저장된 요소 순서대로 함수를 수행한다.
+            //          :lt 선택자와 .prevAll() 메서드를 사용할 때 주의
+
+
+            var $items3 = $("#list3 > li");
+
+            $items3.filter(function(index, element){
+                // 각 요소마다 원하는 방식으로 필터링하기 위한 함수
+
+                // 매개변수
+                //  index   : 요소의 인덱스
+                //  element : 요소 객체(type: element 객체)
+
+                // 반환 값
+                //  true  : 해당 요소를 선택한다.
+                //  false : 해당 요소를 선택하지 않는다.
+
+                // 인덱스가 3의 배수가 아닌 경우 선택
+                return index % 3 !=0;
+            }).css("color", "yellowgreen");
+
+
+            $items3
+            // .filter(":lt(5)")
+            // .eq(5).prevAll()
+            .css("paddingLeft", function(index, value){
+                // 각 요소마다 'padding-left' 스타일 속성을 설정하는 함수
+
+                return (index + 1) * 20 + "px"
+            });
+        });
+    </script>
+</head>
+<body>
+    <ul id="list1" class="gray-box">
+        <li>Item A</li>
+        <li>Item B</li>
+        <li>Item C</li>
+        <li class="selected">Item D</li>
+        <li>Item E</li>
+        <li>Item F</li>
+    </ul>
+    <hr>
+    <ul id="list2" class="gray-box">
+        <li class="item-0">Item 0</li>
+        <li class="item-1">Item 1</li>
+        <li class="item-2">Item 2</li>
+        <li class="item-3">Item 3</li>
+        <li class="item-4">Item 4</li>
+        <li class="item-5">Item 5</li>
+    </ul>
+    <hr>
+    <ul id="list3" class="gray-box">
+        <li class="item-0">Item 0</li>
+        <li class="item-1">Item 1</li>
+        <li class="item-2">Item 2</li>
+        <li class="item-3">Item 3</li>
+        <li class="item-4">Item 4</li>
+        <li class="item-5">Item 5</li>
+    </ul>
+</body>
+</html>

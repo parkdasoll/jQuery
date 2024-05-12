@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - jQuery Control</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #list1 > li{
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            
+            font-size: 1.6em;
+            text-align: center;
+            line-height: 200px;
+
+            background-color: yellowgreen;
+            color: navy;
+        }
+    </style>
+    <script>
+        $(function() {
+            // 문서 객체 이동
+            //  - DOM 에 배치된 요소를 삽입 메서드를 통해
+            //    다른 곳으로 삽입시켜 이동시킨다.
+
+            // #list1 요소
+            var $list1 = $("#list1");
+
+            // #list1 요소의 첫 번째 자식 요소
+            var $first = $list1.children(":first");
+            // var $first = .item1;
+            
+            $list1.append($first);
+            // = $first.appendTo($list1);
+            
+            $first.appendTo($list1);
+            // → $first 에는 현재 DOM 에서의 첫 번째 요소가 아닌
+            //   맨 처음 탐색하여 반환된 요소(.item1)가 저장되어있다.
+            // → 현재 첫 번째 자식 요소를 이동시키려면
+            //   다시 탐색해야한다.
+            $first = $list1.children(":first");
+            // $first = .item2
+            $first.appendTo($list1);
+            
+            $list1.children(":first").appendTo($list1);
+            // .item3 append to #list1
+            
+            // 2초 마다
+            // #list1 요소의 첫 번째 자식 요소를
+            // #list1 요소의 마지막 자식 요소로 이동
+            window.setInterval(function(){
+                // $list1.children(":first").appendTo($list1);
+
+                $list1.append($list1.children(":first"));
+
+            }, 2000);
+            //--------------------------------------------------------------------
+            // 문서 객체 복사
+            //  - 문서 객체를 하위 요소를 포함하여 복사를 한다.
+            //  - 데이터 속성(preperty)과 이벤트 핸들러는 메서드의 인자 값으로
+            //    복사 여부가 결정된다.
+            //      → jQuery 객체에 저장된 data 속성(property)만 복사 여부에 반영되며
+            //        HTML 속성으로 설정된 data 속성(attribute)는 복사 여부 상관 없이
+            //        복사된다.
+            //  - 메서드
+            //      .clone([withDataAndEvents])
+            //          withDataAndEvents
+            //              : 요소에 저장된 데이터와 이벤트 핸들러의 복사 여부
+            //                  false   : 복사 X, 기본 값
+            //                  true    : 복사 O
+
+            var $list2 = $list1;
+            // → 두 개 변수로 하나의 요소를 다루게 된다.
+            //   = 하나의 요소를 공유
+
+            $list1.data("title", "Item List");
+            $list1.on("click", function(){
+                $(this).css("backgroundColor", "navy");
+            });
+
+            // #list1 요소 복사
+            var $clone1 = $list1.clone();       // = false
+            var $clone2 = $list1.clone(true);       
+
+            $clone1.attr("id", "clone1").appendTo("body");
+            $clone2.attr("id", "clone1").appendTo("body");
+
+            console.log("$clone1's title = " + $clone1.data("title"));
+            console.log("$clone1's title = " + $clone2.data("title"));
+
+            //----------------------------------------------------------------
+            // 문서 객체 제거
+            //  - DOM 에서 특정 요소를 완전히 제거한다.
+            //  - 제거가 되어졌어도 프로그램 내에서 변수에 저장되어 있으면
+            //    언제든 다시 추가할 수 있다.
+            //  - 관련 메서드
+            //      .remove()
+            //          : 선택된 문서 객체를 제거
+            //      .empty()
+            //          : 선택된 문서 객체의 내부(하위 요소, 내부 문자)를 제거
+            //          : 복사된 요소의 하위 요소 또는 내부 문자를 제거하기 위해 사용
+
+            $clone1.remove();
+            // → DOM 에서 요소를 제거
+            // $("body").append($clone1);
+
+            $clone2.empty();
+            // → 하위 요소와 내부 문자가 모두 제거되어, 빈 요소가 된다.
+            
+        });
+    </script>
+</head>
+<body>
+    <ul id="list1" class="gray-box" data-index="0">
+        <li class="item1">item1</li>
+        <li class="item2">item2</li>
+        <li class="item3">item3</li>
+    </ul>
+    <hr>
+</body>
+</html>

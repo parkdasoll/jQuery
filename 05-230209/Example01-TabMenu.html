@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Tab Menu</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <!-- <link rel="stylesheet" href="../../CSS/dark.css"> -->
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #tab-container {
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        #tab-buttons::after{content: ""; display: block; clear: both;}
+        #tab-buttons > li {
+            /* 모든 항목들을 나란히 나열 */
+            float: left;
+            /* 모든 항목들이 균등한 너비를 가지도록 설정 */
+            width: 50%;
+
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 2.4;
+
+            /* 활성화/비활성화 상태의 요소를 만들 때 */
+            /* 일반적으로는 기본 스타일을 비활성화 상태로 작성 */
+            background-color: #ccc;
+            color: #777;
+            cursor: pointer;
+
+            border-bottom: 2px solid #777;
+
+            /* 활성화된 탭 메뉴의 테두리까지 포함하면 */
+            /* 총 너비가 100% 를 넘기 때문에 크기 속성의 범위를 */
+            /* 테두리까지로 설정 */
+            box-sizing: border-box;
+        }
+
+        /* 활성화 된 탭 메뉴 버튼 */
+        #tab-buttons > li.on {
+            background-color: transparent;
+            color: inherit;
+            cursor: default;
+            border: 2px solid #777;
+            border-bottom: none; /* 테투리 제거 */
+        }
+
+        .tab-content {
+            padding: 1em;
+            border: 2px solid #777;
+            border-top: none;
+            line-height: 1.6;
+
+            /* 기본 스타일을 비활성화 상태로 작성 */
+            display: none;
+        }
+        .tab-content.on {
+            display: block;
+        }
+
+    </style>
+    <script>
+        $(function(){
+            // document 객체의 ready 이벤트 핸들러
+
+            // 0. 요소 탐색 및 변수 선언
+            // 1. #tab-buttons 요소 내의 li 요소를 클릭하면
+            // 2. 클릭한 li 요소를 활성화(스타일 설정, on 클래스 추가)
+            // 3. 기존에 활성화되어있던 li 요소를 비활성화(스타일 제거, on 클래스 제거)
+            // 4. 클릭한 li 요소와 연결된 .tab-content 요소를 활성화(스타일 설정, on 클래스 추가)
+            // 5. 기존에 활성화 되어있던 .tab-content 요소를 비활성화(스타일 제거, on 클래스 제거)
+            // -------------------------------------------------------------------------------------
+            // .addClass()      : 클래스를 추가하는 메서드
+            // .removeClass()   : 클래스를 제거하는 메서드
+            
+            // 0. 요소 탐색 및 변수 선언
+            var $tabButtons = $("#tab-buttons > li");
+            var $tabContent = $(".tab-content");
+            
+            // 1. #tab-buttons 요소 내의 li 요소를 클릭하면
+            $tabButtons.on("click", function(){
+
+                // 클릭한 요소 = 이벤트가 발생한 요소 = 자기 자신
+                var $this = $(this);
+
+                // 클릭한 요소가 이미 활성화가 되어 있으면
+                // 이후 코드를 수행할 필요가 없기 때문에 함수를 종료
+                if($this.is(".on")) return;
+
+                // 2. 클릭한 li 요소를 활성화(스타일 설정, on 클래스 추가)
+                // $this.addClass("on")
+
+                // 3. 기존에 활성화되어있던 li 요소를 비활성화(스타일 제거, on 클래스 제거)
+                //      - 형제 요소들 중 하나만 활성화되기 때문에 
+                //        클릭한 요소의 형제 요소들 중 활성화된 요소를 탐색
+                // $this.siblings(".on").removeClass("on")
+
+                // 메서드 체이닝을 통해 하나의 명령어로 작성할 수 있다.
+                $this.addClass("on").siblings(".on").removeClass("on");
+                // → 클릭한 요소를 활성화 → 그 외 요소들 중 활성화 된 요소를 비활성화
+
+                // 4. 클릭한 li 요소와 연결된 .tab-content 요소를 활성화(스타일 설정, on 클래스 추가)
+                // var $target = $( $this.data("target") );
+                // $target.addClass("on");
+                // 5. 기존에 활성화 되어있던 .tab-content 요소를 비활성화(스타일 제거, on 클래스 제거)
+                // $target.siblings(".tab-content.on").removeClass("on");
+
+                // 형제 요소로 다루기에 제한된 경우
+                // 형제 요소로 탐색하기 보다 조작할 모든 요소를 포함하고 있는
+                // jQuery 객체를 통해 조작하는 것이 안전하다.
+
+                var $target = $(this).data("target");
+                $tabContent.removeClass("on").filter($target).addClass("on");
+                // → 모든 요소를 비활성화 → 연결된 요소를 활성화
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="tab-container">
+        <!-- 탭 메뉴의 버튼 목록 -->
+        <!--    - .on 클래스 -->
+        <!--        : 활성화가 되어있는 요소에 추가되는 클래스 -->
+        <!--    - data-target 속성 -->
+        <!--        : 활성화된 li 요소와 같이 활성화될 .tab-content 요소의 id 속성 -->
+        <!--        : jQuery 에서 바로 탐색하기 위해 id 선택자로 작성 -->
+        <ul id="tab-buttons">
+            <li data-target="#content-front" class="on">Front-end</li>
+            <li data-target="#content-back">Back-end</li>
+        </ul>
+
+        <!-- 첫 번째 탭 메뉴 항목의 컨텐츠 -->
+        <ul id="content-front" class="tab-content on">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>jQuery</li>
+        </ul>
+
+        <!-- 두 번째 탭 메뉴 항목의 컨텐츠 -->
+        <ul id="content-back" class="tab-content">
+            <li>PHP</li>
+            <li>ASP</li>
+            <li>JSP</li>
+            <li>MySQL</li>
+        </ul>
+    </div>  <!-- tab-container -->
+</body>
+</html>
