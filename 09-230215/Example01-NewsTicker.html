@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - NewsTicker</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #news-ticker {
+            width: 650px;
+            height: 2em;
+            border: 5px solid gold;
+            margin: 0 auto;
+
+            /* overflow: hidden; */
+        }
+
+        #news-ticker > ul {
+            padding: 0 1rem;
+            position: relative;
+            top: 0; left: 0;
+        }
+
+        #news-ticker > ul > li {
+            height: 2em;
+            line-height: 2em;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    <script>
+        $(function(){
+            // 0. 요소 탐색 및 변수 선언
+            // 1. 일정 시간마다( = 2000ms)
+            // 2. #news-ticker 요소 내의 ul 요소를
+            //    #news-ticker 요소의 높이만큼 위로 천천히 이동( = 600ms)
+            // 3. ul 요소의 움직임이 끝나면
+            // 3-1. ul 요소의 첫 번째 자식 요소를
+            //      ul 요소의 마지막 자식 요소로 이동
+            // 3-2. ul 요소의 style 속성을 제거
+            // 4. #news-ticker 요소의 영역에 마우스 포인터가 들어가면
+            // 4-1. ul 요소가 움직이지 않도록 한다.
+            // 5. #news-ticker 요소의 영역에서 마우스 포인터가 빠져나오면
+            // 5-1. ul 요소가 다시 움직이도록 한다.
+            //-----------------------------------------------------------------------
+            // 0. 요소 탐색 및 변수 선언
+            var $newsTicker = $("#news-ticker");
+            var $newsComments = $newsTicker.children("ul");
+            var delay = 2000;
+            var duration = 600;
+            var timerId = 0;
+
+            function nextNewsComment() {
+                // 2. #news-ticker 요소 내의 ul 요소를
+                //    #news-ticker 요소의 높이만큼 위로 천천히 이동( = 600ms)
+                $newsComments.css({
+                    top: "-100%",
+                    transitionDuration: duration + "ms"
+                });
+                
+                // 3. ul 요소의 움직임이 끝나면
+                window.setTimeout(function(){
+                    // 3-1. ul 요소의 첫 번째 자식 요소를
+                    //      ul 요소의 마지막 자식 요소로 이동
+                    // 3-2. ul 요소의 style 속성을 제거
+                    $newsComments.removeAttr("style")
+                                .children(":first").appendTo($newsComments);
+                },duration);
+            }
+
+            // 1. 일정 시간마다( = 2000ms)
+            timerId = window.setInterval(nextNewsComment, delay);
+            $newsTicker.hover(
+                // 4. #news-ticker 요소의 영역에 마우스 포인터가 들어가면
+                //      = mouseenter 이벤트
+                function() {
+                    // 4-1. ul 요소가 움직이지 않도록 한다.
+                    window.clearInterval(timerId);
+                },
+                // 5. #news-ticker 요소의 영역에서 마우스 포인터가 빠져나오면
+                //      = mouseleave 이벤트
+                function() {
+                    // 5-1. ul 요소가 다시 움직이도록 한다.
+                    timerId = window.setInterval(nextNewsComment, delay);
+                }
+            )
+
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <div id="news-ticker">
+            <ul>
+                <li>1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                <li>2. Pellentesque sodales libero sed ex laoreet dapibus.</li>
+                <li>3. Quisque ultrices metus ac nisi pharetra, at rhoncus lorem semper.</li>
+                <li>4. Mauris rhoncus nulla et velit ultricies, ac luctus erat vulputate.</li>
+                <li>5. Pellentesque et tellus in diam rutrum aliquam.</li>
+            </ul>
+        </div> <!-- /#news-ticker -->
+    </div> <!-- /.gray-box -->
+</body>
+</html>

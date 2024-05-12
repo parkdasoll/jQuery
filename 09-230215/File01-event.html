@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - Event</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        .on {
+            border: 10px solid orangered;
+        }
+    </style>
+    <script>
+        $(function(){
+            // jQuery 이벤트 연결
+            //  - 간단한 이벤트 연결
+            //      : 이벤트 이름으로 된 메서드를 통해 이벤트 핸들러를 연결하는 방식
+            //          $element.click(function() { });
+            //  - 기본 이벤트 연결
+            //      : JavaScript 에서 사용하던 .addEventListener() 와 같은 방식
+            //      : 이벤트 이름와 이벤트 핸들러를 지정하여 연결하는 방식
+            //  - 1회성 이벤트 연결
+            //      : 이벤트 이름과 이벤트 핸들러를 지정하여 연결한 다음
+            //        한 번 핸들러를 수행하고 제거하는 방식
+            //  - 마우스 관련 이벤트 연결
+            //      : mouseenter 이벤트와 mouseleave 이벤트의 핸들러를 연결하는 방식
+            //      : .hover(function() { }, function() { })
+            //          → 1. mouseenter 이벤트의 핸들러
+            //          → 2. mouseleave 이벤트의 핸들러
+            //      : .hover(function() { })
+            //          → mouseenter 이벤트와 mouseleave 이벤트의 핸들러
+
+
+            // 간단한 이벤트 연결
+            $("#hello1")
+                .click(function(){
+                    $(this).css({
+                        backgroundColor:"navy",
+                        color:"yellow"
+                    });
+                })
+                .keydown(function(){
+
+                });
+
+            // 기본 이벤트 연결
+            $("#hello2")
+                .on("click", function() { 
+                    $(this).css({
+                        backgroundColor:"navy",
+                        color:"yellow"
+                    });
+                })
+                .on({   // 다수의 이벤트를 연결하기 위한 객체
+                    mouseenter : function() { 
+                        $(this).addClass("on");
+                    },
+                    mouseleave : function() { 
+                        $(this).removeClass("on");
+                    }
+                });
+
+            // 1회성 이벤트 연결
+            $("#hello3")
+                .one("click", function(){
+                    window.alert( this.innerHTML);
+                })
+                .one({
+                    mouseenter : function() {
+                        $(this).addClass("on");
+                    },
+                    mouseleave : function() {
+                        $(this).removeClass("on");
+                    }
+                });
+
+            // 마우스 관련 이벤트 연결
+            //  - 요소의 영역에 마우스 커서가 들어오고 나갔을 때의 기능을 처리하기 위한 기능
+            $("#hello4").hover(
+                // mouseenter 이벤트의 핸들러
+                function() {
+                    $(this).addClass("on");
+                },
+                // mouseleave 이벤트의 핸들러
+                function() {
+                    $(this).removeClass("on");
+                }
+            );
+
+            $("#hello5")
+                    .hover(function(){
+                        // mouseenter 이벤트와 mouseleave 이벤트의 핸들러
+                        $(this).toggleClass("on");
+                    });
+
+            
+            // 이벤트 객체
+
+            var $container = $("#container");
+            var $link = $container.children("a");
+
+            $container.on("click", function(){
+                $(this).css("backgroundColor", "navy");
+            });
+            $link.on("click", function(Event){
+                // 기본 이벤트를 제거
+                event.preventDefault();
+                // 이벤트 전달 제거
+                event.stopPropagation();
+                // 모든 이벤트 전달 제거
+                //  - 이후 이벤트 핸들러를 호출X
+                event.stopImmediatePropagation();
+                $(this).css("color", "yellowgreen");
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1 id="hello1" class="gray-box">Hello World!</h1>
+    <h1 id="hello2" class="gray-box">Hello World!</h1>
+    <h1 id="hello3" class="gray-box">Hello World!</h1>
+    <h1 id="hello4" class="gray-box">Hello World!</h1>
+    <h1 id="hello5" class="gray-box">Hello World!</h1>
+    <hr>
+    <div id="container" class="gray-box">
+        <a href="http://www.naver.com">NAVER</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Log in</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        body {
+            background-color: #534292;
+            color: #79289f;
+            font-family: "Source Sanse Pro", "Open Sans", "나눔바른고딕", "맑은고딕", sans-serif;
+        }
+        #container {
+            width: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #wrap {
+            padding: 2em;
+            background-color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        #wrap > h1 {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        #login-form > * {
+            /* 원하는 크기로 설정하기 위해 block 형식으로 설정 */
+            display: block;
+            width: 100%;
+            border-radius: 8px;
+
+            /* width 속성의 범위를 테두리까지의 너비로 설정 */
+            box-sizing: border-box;
+
+            /* 기본 스타일 제거 */
+            border: none;
+            outline: none;
+            padding: 0;
+            background-color: transparent;
+        }
+        #login-form > input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 1em;
+
+            /* 배경 속성을 이용하여 아이콘을 표시 */
+            /* 아이콘의 크기에 맞춰 여백을 설정 */
+            padding-left: 34px;
+            background: url(../../images/icon-account-18-2.png) no-repeat 8px center;
+        }
+        #login-form > input[type=password] {
+            background-image: url(../../images/icon-lock-18-2.png);
+        }
+        #login-form > button[type=submit] {
+            background-color: #79289f;
+            color: white;
+            font-size: 1.2em;
+            padding: 0.5em 0;
+        }
+        #signup {
+            background-color: #ddd;
+            padding: 2em;
+            border-radius: 0 0 8px 8px;
+
+            color: #777;
+            text-align: center;
+            margin-top: -1px;
+        }
+        #signup > a {
+            color: #79289f;
+        }
+        #forget {
+            padding: 1em;
+            text-align: center;
+        }
+        #forget > a {
+            color: white;
+        }
+        #alert {
+            position: fixed;
+            /* top: 80px; */
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+
+            background-color: mediumvioletred;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            white-space: nowrap;
+            transition-duration: 400ms;
+            z-index: 100;
+        }
+    </style>
+    <script>
+        $(function(){
+            // 0. 요소 탐색 및 변수 선언
+            // 1. #login-form 요소 내에서 submit 버튼을 눌렀을 때
+            // 2. #account 요소의 입력된 값의 길이가 4 이하이면
+            // 2-1. #alert 요소의 문구를 설정
+            // 3. 그렇지 않고 #password 요소의 입력된 값의 길이가 4 이하이면
+            // 3-1. #alert 요소의 문구를 설정
+            // 4. #alert 요소가 화면에 보여지도록 천천히 아래로 이동
+            // 5. 일정 시간 뒤에
+            // 5-1. #alert 요소가 화면에서 사라지도록 천천히 위로 이동
+            //-------------------------------------------------------------------
+            // 0. 요소 탐색 및 변수 선언
+            var $alert = $("#alert");
+            var $account = $("#account");
+            var $password = $("#password");
+            var timerId = 0;
+
+            // 1. #login-form 요소 내에서 submit 버튼을 눌렀을 때
+            //      - submit 버튼을 누르면 form 요소에서 submit 이벤트가 발생
+            //      - form 요소의 기본 이벤트 : action 속성에 연결된 서버에 입력 값을 전달
+            $("#login-form").on("submit", function(event) {
+
+                var accountLength = $account.val().length;
+                var passwordLength = $password.val().length;
+
+                // 정상적으로 입력된 경우 함수를 더 이상 수행할 필요가 없기 때문에
+                // 함수를 즉시 종료
+                if(accountLength > 4 && passwordLength > 4) return;
+
+                // 위의 조건을 만족하지 않을 경우
+                // 제대로 입력되지 않은 요소가 있는 것이기 때문에
+                // 기본 이벤트를 제거 
+                event.preventDefault();
+
+                // 2. #account 요소의 입력된 값의 길이가 4 이하이면
+                if(accountLength <= 4)
+                    // 2-1. #alert 요소의 문구를 설정
+                    $alert.html("Your account muse be longer than 4.")
+                    // 3. 그렇지 않고 #password 요소의 입력된 값의 길이가 4 이하이면
+                else if(passwordLength <= 4)
+                    // 3-1. #alert 요소의 문구를 설정
+                    $alert.html("Your password muse be longer than 4.")
+                    
+                // 4. #alert 요소가 화면에 보여지도록 천천히 아래로 이동
+                $alert.css("top", 80);
+
+                // 처음 누른 시점을 기준으로 2.5 초 뒤에 올라가도록 작성
+                //  - 등록된 타이머가 있는지 검사
+                //  - 등록된 타이머가 있는 경우 추가적으로 
+                //    타이머가 등록되지 않도록 해야한다.
+                
+                // 등록된 타이머가 있으면 함수를 종료
+                // if(timerId) return;
+
+                // 마지막으로 누른 시점을 기준으로 2.5 초 뒤에 올라가도록 작성
+                //  - 이전에 등록된 타이머를 해제 하나의 타이머만 동작
+
+                // 등록된 타이머가 있으면 타이머를 해제
+                if(timerId > 0) window.clearTimeout(timerId);
+                // 0 → flase
+                // 1 ~ → true
+
+                /*
+                    등록된 타이머가 있으면 ~
+                    if(timerId), if(timerId > 0)
+
+                    등록된 타이머가 없으면 ~
+                    if(!timerId), if(timerId == 0)
+                */
+
+                // 5. 일정 시간 뒤에
+                timerId = window.setTimeout(function(){
+                    // 5-1. #alert 요소가 화면에서 사라지도록 천천히 위로 이동
+                    $alert.removeAttr("style");
+
+                    // 등록된 타이머가 수행되고 나서도 변수에
+                    // 타이머의 ID 가 저장되어있기 때문에
+                    // 변수의 값을 0 으로 설정
+                    timerId = 0;
+                }, 2500);
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="alert">
+        Your account must be longer than 4.
+    </div>
+    <div id="container">
+        <!-- 로그인 입력 양식 -->
+        <div id="wrap">
+            <h1>LOG-IN</h1>
+            <form action="login" method="post" id="login-form">
+                <input type="text" name="account" id="account" placeholder="Enter your account" autocomplete="off">
+                <input type="password" name="password" id="password" placeholder="Enter your password">
+                <button type="submit">LOG IN</button>
+        </form>
+        </div>
+        <!-- 회원 가입 문구 -->
+        <div id="signup">
+            Have no account? <a href="#signup">Sign up</a>
+        </div>
+        <!-- 비밀번호 찾기 문구 -->
+        <div id="forget">
+            <a href="#foret">Forget your password?</a>
+        </div>
+    </div>
+</body>
+</html>

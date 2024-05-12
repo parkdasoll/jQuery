@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - each</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        strong {
+            padding-left: 1em;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        $(function() {
+            // jQuery 객체 내에는 다수의 요소들을 저장하기 위한 배열이 있으며
+            // jQuery 객체의 메서드를 통해 배열에 저장된 요소들을 한 번에 조작한다.
+            //  - 하나의 메서드를 통해 다수의 요소의 속성을 일괄적으로 설정
+            //  - 인자 값으로 함수를 전달함으로써 각 요소마다 다른 속성 값으로 설정
+            //  → 이때 함수를 인자로 받는 메서드가 많아지면 오히려 가독성이 떨어지게 된다.
+            $("#list1 > li")
+                .addClass("gray-box")
+                .css("width", function(index, value){
+                    return (index + 1) * 200;
+                })
+                .html(function(index, innerHTML){
+                    return "[HOT]" + innerHTML;
+                });
+
+            // -------------------------------------------------------------------------
+            //  .each() 메서드
+            //  - jQuery 객체 내의 각 요소마다 지정된 함수를 수행시키기 위한 메서드
+            //  - 용도
+            //      각 요소마다 조작해야할 속성이 많은 경우
+            //      각 요소의 속성을 반환을 받아 조작해야하는 경우
+            $("#list2 > li").each(function(index, element) {
+
+                // 하나의 요소가 어떻게 조작되는지 쉽게 알 수 있다.
+                $(element)
+                    .addClass("gray-box")
+                    .css("width", (index + 1) * 200)
+                    .html("[HOT]" + element.innerHTML);
+
+            });
+
+            $("#list3 > li")
+                .each(function(index, element){
+
+                    // title 속성 반환
+                    var title = $(element).attr("title");
+
+                    // strong 요소 생성
+                    $("<strong></strong>").html(title).appendTo(element);
+                    
+
+                    // title 속성 제거
+                    $(element).removeAttr("title");
+                });
+
+            $("#list4 > li").each(function() {
+                var color = $(this).data("color");
+
+                $(this).css("color", color);
+            });
+            
+            $("#list4 > li").css("color", function(){
+                return $(this).data("color");
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+    <ul id="list1">
+        <li>Item A</li>
+        <li>Item B</li>
+        <li>Item C</li>
+    </ul>
+    <hr>
+    <ul id="list2">
+        <li>Item A</li>
+        <li>Item B</li>
+        <li>Item C</li>
+    </ul>
+    <hr>
+    <ul id="list3" class="gray-box">
+        <li title="HTML">Course 1</li>
+        <li title="CSS">Course 2</li>
+        <li title="JavaScript">Course 3</li>
+        <li title="jQuery">Course 4</li>
+    </ul>
+    <hr>
+    <ul id="list4" class="gray-box">
+        <li data-color="red">Course 1</li>
+        <li data-color="green">Course 2</li>
+        <li data-color="blue">Course 3</li>
+        <li data-color="gold">Course 4</li>
+    </ul>
+
+</body>
+</html>

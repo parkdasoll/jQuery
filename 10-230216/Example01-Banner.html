@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Banner</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #banner-container {
+            /* 배너 이미지가 표시되는 영역의 너비를 뷰포트만큼 설정 */
+            width: 100%;
+
+            /* banner-container 요소의 너비와 상관 없이 */
+            /* 배너 이미지가 일정한 크기로 보여질 수 있도록 높이를 고정 */
+            height: 600px;
+
+            border: 10px solid white;
+            /* 좌, 우 테두리 제거 */
+            border-style: solid none;
+        }
+        #banner-container > ul {
+            width: 500%;
+            height: 100%;
+            position: relative;
+            top: 0; left: 0;
+        }
+        #banner-container > ul > li {
+            /* 모든 항목들을 나란히 나열 */
+            float: left;
+
+            /* 모든 항목들의 너비를 균등하게 설정 */
+            width: 20%;
+            height: 100%;
+
+            /* img 요소의 기준 영역으로 지정 */
+            position: relative;
+
+            /* li 요소의 크기가 줄면서 영역을 벗어난 이미지를 숨겨준다. */
+            overflow: hidden;
+
+        }
+        #banner-container > ul > li > img {
+            display: block;
+
+            /* li 요소의 영역을 기준으로 중앙에 배치 */
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+    <script>
+        $(function(){
+            // 0. 요소 탐색 및 변수 선언
+            // 1. 일정 시간 마다
+            // 2. #banner-container 요소 내의 ul 요소를
+            //    #banner-container 요소의 너비만큼 왼쪽으로 천천히 이동
+            // 3. ul 요소의 움직임이 끝나면
+            // 3-1. ul 요소의 스타일을 제거
+            // 3-2. ul 요소의 첫 번째 자식 요소를
+            //      ul 요소의 마지막 자식 요소로 이동
+            // 4. #banner-container 요소의 영역에 마우스 커서가 들어가면
+            // 4-1. ul 요소가 움직이지 않도록 한다.
+            // 5. #banner-container 요소의 영역에서 마우스 커서가 나오면
+            // 5-1. ul 요소가 다시 움직이도록 한다.
+            //---------------------------------------------------------------
+            // 0. 요소 탐색 및 변수 선언
+            var $bannerContainer = $("#banner-container");
+            var $bannerList = $bannerContainer.children("ul");
+            var delay = 3000;
+            var duration = 1000;
+            var timerId = 0;
+
+            function nextBannerSlide(){
+                // 2. #banner-container 요소 내의 ul 요소를
+                //    #banner-container 요소의 너비만큼 왼쪽으로 천천히 이동
+                $bannerList.css({
+                    left: "-100%",
+                    transitionDuration: duration + "ms"
+                });
+                // 3. ul 요소의 움직임이 끝나면
+                window.setTimeout(function(){
+                    // 3-1. ul 요소의 스타일을 제거
+                    // 3-2. ul 요소의 첫 번째 자식 요소를
+                    //      ul 요소의 마지막 자식 요소로 이동
+                    $bannerList.removeAttr("style")
+                                .children(":first").appendTo($bannerList)
+                }, duration);
+            }
+
+            // 1. 일정 시간 마다
+            timerId = window.setInterval(nextBannerSlide, delay);
+            
+            $bannerContainer.hover(
+                // 4. #banner-container 요소의 영역에 마우스 커서가 들어가면
+                function() {
+                    // 4-1. ul 요소가 움직이지 않도록 한다.
+                    window.clearInterval(timerId);
+                },
+                // 5. #banner-container 요소의 영역에서 마우스 커서가 나오면
+                function() {
+                    // 5-1. ul 요소가 다시 움직이도록 한다.
+                    timerId = window.setInterval(nextBannerSlide, delay);
+                }
+            )
+
+        });
+    </script>
+</head>
+<body>
+    <div id="banner-container">
+        <ul>
+            <li><img src="../../images/banner-11.png" alt="photo"></li>
+            <li><img src="../../images/banner-12.png" alt="photo"></li>
+            <li><img src="../../images/banner-13.png" alt="photo"></li>
+            <li><img src="../../images/banner-14.png" alt="photo"></li>
+            <li><img src="../../images/banner-15.png" alt="photo"></li>
+        </ul>
+    </div>
+</body>
+</html>

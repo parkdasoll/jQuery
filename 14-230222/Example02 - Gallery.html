@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example02 - Gallery</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #gallery::after{content: ""; display: block; clear: both;}
+        #gallery > li {
+            float: left;
+            margin: 10px;
+        }
+        #gallery > li > a { 
+            display: block;
+            border: 5px solid white;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+        }
+        #gallery > li > a > img {
+            display: block;
+            width: 200px;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+            background-color: rgba(0, 0, 0, 0.97);
+
+            display: none;
+        }
+
+        #photo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 75%;
+            border: 10px solid white;
+
+            display: none;
+        }
+
+        #close {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+
+            width: 30px;
+            height: 30px;
+            background: url(../../images/close.png) no-repeat center /cover transparent;
+
+            border: none;
+            outline: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        button > span {display: none;}
+
+    </style>
+    <script>
+        $(function(){
+
+            // 0. 요소 탐색 및 변수 선언
+            // 1. #gallery 요소 내의 a 요소를 클릭하면
+            // 1-1. 연결된 경로로 이동되지 않도록 기본 이벤트를 제거
+            // 1-2. 클릭한 요소의 href 속성을 반환
+            // 1-3. #photo 요소의 src 속성을 href 속성 값으로 설정
+            // 1-4. #overlay 요소를 페이드 효과로 나타나도록 한다.
+            // 1-5. #overlay 요소가 완전히 나타난 다음
+            // 1-6. #photo 요소를 페이드 효과로 나타나도록 한다.
+            // 2. #close 요소를 클릭하면
+            // 2-1. #photo 요소를 페이드 효과로 사라지도록 한다.
+            // 2-2. #photo 요소가 완전히 사라진 다음
+            // 2-3. #overlay 요소를 페이드 효과로 사라지도록 한다.
+            //------------------------------------------------------------------
+            // 0. 요소 탐색 및 변수 선언
+            var $overlay = $("#overlay");
+            var $photo = $("#photo");
+            var duration = 400;
+
+            // 1. #gallery 요소 내의 a 요소를 클릭하면
+            $("#gallery > li > a").on("click", function(event){
+                // 1-1. 연결된 경로로 이동되지 않도록 기본 이벤트를 제거
+                event.preventDefault();
+                // 1-2. 클릭한 요소의 href 속성을 반환
+                // var herf = this.href;
+                // 1-3. #photo 요소의 src 속성을 href 속성 값으로 설정
+                // $photo.attr("scr", href);
+                $photo.attr("scr", this.href);
+                // 1-4. #overlay 요소를 페이드 효과로 나타나도록 한다.
+                $overlay.fadeIn(duration, function() {
+                    // #overlay 요소의 페이드 효과가 끝난 다음 수행하는 함수
+
+                    // 1-5. #overlay 요소가 완전히 나타난 다음
+                    // 1-6. #photo 요소를 페이드 효과로 나타나도록 한다.
+                    $photo.fadeIn(duration);
+                });
+
+            });
+            // 2. #close 요소를 클릭하면
+            $("#close").on("click", function(){
+                // 2-1. #photo 요소를 페이드 효과로 사라지도록 한다.
+                $photo.fadeOut(duration, function(){
+                    // 2-2. #photo 요소가 완전히 사라진 다음
+                    // 2-3. #overlay 요소를 페이드 효과로 사라지도록 한다.
+                    $overlay.fadeOut(duration);
+                });
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="overlay">
+        <img src="../../images/slide-11.png" alt="photo" id="photo">
+        <button id="close"><span>CLOSE BUTTON</span></button>
+    </div>
+
+    <div class="gray-box">
+        <ul id="gallery">
+            <li>
+                <a href="../../images/slide-11.png">
+                    <img src="../../images/thumbnail-11.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-12.png">
+                    <img src="../../images/thumbnail-12.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-13.png">
+                    <img src="../../images/thumbnail-13.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-14.png">
+                    <img src="../../images/thumbnail-14.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-15.png">
+                    <img src="../../images/thumbnail-15.png" alt="thumbnail">
+                </a>
+            </li>
+        </ul>   <!-- /#gallery -->
+    </div>  <!-- /.gray-box -->
+</body>
+</html>

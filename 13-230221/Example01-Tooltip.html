@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Tooltip</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        .tooltip {
+            border-bottom: 2px dotted #ccc;
+            cursor: help;
+
+            /* .tooltip-box 요소의 기준 영역으로 지정 */
+            position: relative;
+        }
+
+        .tooltip-box {
+            /* .tooltip 요소의 영역 아래에 배치 */
+            position: absolute;
+            top: 100%;
+            left: 0;
+
+            background-color: #333;
+            z-index: 100;
+            white-space: nowrap;
+            font-size: 0.7em;
+            padding: 0.25em 0.5em;
+            border: 1px solid white;
+            border-radius: 8px;
+            box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.4);
+
+            transition-duration: 200ms;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .tooltip-box.on {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+    <script>
+        $(function(){
+            // 1. 각 .tooltip 요소마다
+            // 1-1. 각 요소의 title 속성의 값을 반환
+            // 1-2. 새로운 툴팁으로 사용할 span 요소를 생성
+            // 1-3. 생성된 span 요소의 class 속성에 'tooltip-box' 를 추가
+            // 1-4. .tooltip-box 요소의 내부 문자에 title 속성 값을 설정
+            // 1-5. .tooltip-box 요소를 해당 .tooltip 요소의
+            //      마지막 자식 요소로 추가
+            // 2. .tooltip 요소의 title 속성 제거
+            // 3. .tooltip 요소의 영역에 마우스 커서가 들어가면
+            // 3-1. .tooltip-box 요소가 화면에 보여지도록 한다.
+            // 4. .tooltip 요소의 영역에서 마우스 커서가 나오면
+            // 4-1. .tooltip-box 요소가 화면에서 사라지도록 한다.
+            //------------------------------------------------------------------
+            // 1. 각 .tooltip 요소마다
+            $(".tooltip").each(function(index, element){
+                // 1-1. 각 요소의 title 속성의 값을 반환
+                // var title = $(element).attr("title");
+                var title = $(this).attr("title");
+
+                // 1-2. 새로운 툴팁으로 사용할 span 요소를 생성
+                // 1-3. 생성된 span 요소의 class 속성에 'tooltip-box' 를 추가
+                // 1-4. .tooltip-box 요소의 내부 문자에 title 속성 값을 설정
+                // 1-5. .tooltip-box 요소를 해당 .tooltip 요소의
+                //      마지막 자식 요소로 추가
+                $("<span></span>")
+                    .addClass("tooltip-box")
+                    .html(title)
+                    .appendTo(this)
+            })
+            // 2. .tooltip 요소의 title 속성 제거
+            .removeAttr("title")
+            .hover(
+                // 3. .tooltip 요소의 영역에 마우스 커서가 들어가면
+                function() {
+                    // 3-1. .tooltip-box 요소가 화면에 보여지도록 한다.
+                    $(this).children(".tooltip-box").addClass("on");
+                },
+                // 4. .tooltip 요소의 영역에서 마우스 커서가 나오면
+                function() {
+                    // 4-1. .tooltip-box 요소가 화면에서 사라지도록 한다.
+                    $(this).children(".tooltip-box").removeClass("on");
+                }
+            );
+        });
+    </script>
+</head>
+<body>
+    <div class="gray-box">
+        <p>
+            <span class="tooltip" title="Hyper Text Markup Langauge">HTML</span> 
+            is the language for builidng web pages.
+        </p>
+        <p>
+            <span class="tooltip" title="Casecading Style Sheet">CSS</span> 
+            is the language we use to style an HTML document.
+        </p>
+    </div>
+</body>
+</html>

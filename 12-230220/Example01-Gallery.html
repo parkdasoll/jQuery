@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Gallery</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #gallery::after{content:""; display: block; clear: both;}
+
+        #gallery > li {
+            float: left;
+            margin: 5px 10px; 
+        }
+        #gallery > li > a {
+            display: block;
+            border: 5px solid white;
+        }
+        #gallery > li > a > img {
+            display: block;
+            width: 200px;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; bottom: 0;
+            left: 0; right: 0;
+            background-color: rgba(0, 0, 0, 0.97);
+
+            transition-duration: 400ms;
+            visibility: hidden;
+            opacity: 0;
+        }
+        #photo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            transition-duration: 400ms;
+            visibility: hidden;
+            opacity: 0;
+            max-width: 75%;
+            border: 10px solid white;
+        }
+
+        #close {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 30px;
+            height: 30px;
+
+            border: none;
+            outline: none;
+            padding: 0;
+            cursor: pointer;
+            background-color: transparent;
+
+            background: url(../../images/close.png) no-repeat center /cover;
+        }
+        #overlay.on, #photo.on {
+            visibility: visible;
+            opacity: 1;
+        }
+        #close > span { display: none;}
+    </style>
+    <script>
+        $(function(){
+            // 요소 탐색 및 변수 선언
+            // 1. #gallery 요소의 a 요소를 클릭하면
+            // 1-1. 클릭한 요소의 href 속성을 반환
+            // 1-2. #photo 요소의 scr 속성을 반환 받은 href 속성 값으로 설정
+            // 1-3. #ocerlay 요소를 페이드 효과로 화면에 나타나도록 설정
+            // 1-4. #overlay 요소가 완전히 나타난 다음
+            // 1-5. #photo 요소를 페이드 효과로 화면에 나타나도록 설정
+            // 1-6. a 요소의 기본 이벤트가 동작되지 않도록
+            //      기본 이벤트 제거
+            // 2. #close 요소를 클릭하면
+            // 2-1. #photo 요소를 페이드 효과로 화면에서 사라지도록 설정
+            // 2-2. #photo 요소가 완전히 사라진 다음
+            // 2-3. #overlay 요소가 페이드 효과로 화면에서 사라지도록 설정
+            //----------------------------------------------------------------
+            // 요소 탐색 및 변수 선언
+            var $overlay = $("#overlay");
+            var $photo = $("#photo");
+
+            // overlay, #photo 요소의 페이드 효과 진행 시간
+            var duration = 400;
+
+            // 1. #gallery 요소의 a 요소를 클릭하면
+            $("#gallery > li > a").on("click", function(event){
+                // 1-1. 클릭한 요소의 href 속성을 반환
+                var href = this.href;
+
+                // 1-2. #photo 요소의 scr 속성을 반환 받은 href 속성 값으로 설정
+                $photo.attr("src", href);
+                // 1-3. #overlay 요소를 페이드 효과로 화면에 나타나도록 설정
+                $overlay.addClass("on");
+                // 1-4. #overlay 요소가 완전히 나타난 다음
+                window.setTimeout(function() {
+                    // 1-5. #photo 요소를 페이드 효과로 화면에 나타나도록 설정
+                    $photo.addClass("on");
+                }, duration);
+                // 1-6. a 요소의 기본 이벤트가 동작되지 않도록
+                //      기본 이벤트 제거
+                event.preventDefault();
+                
+            });
+            // 2. #close 요소를 클릭하면
+            $("#close").on("click", function(){
+                // 2-1. #photo 요소를 페이드 효과로 화면에서 사라지도록 설정
+                $photo.removeClass("on");
+                // 2-2. #photo 요소가 완전히 사라진 다음
+                window.setTimeout(function() {
+                    // 2-3. #overlay 요소가 페이드 효과로 화면에서 사라지도록 설정
+                    $overlay.removeClass("on");
+                },duration);
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="overlay">
+        <img src="../../images/slide-11.png" alt="photo" id="photo">
+        <button id="close"><span>CLOSE BUTTON</span></button>
+    </div>
+
+    <div class="gray-box">
+        <!-- 작은 이미지와(썸네일)와 큰 이미지를 다룰때 -->
+        <!-- 큰 이미지의 크기를 작게하여 표시하는 것이 아닌 -->
+        <!-- 작은 이미지를 만들어서 용량을 최소화하는 것이 좋다. -->
+        <ul id="gallery">
+            <li>
+                <a href="../../images/slide-11.png">
+                    <img src="../../images/thumbnail-11.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-12.png">
+                    <img src="../../images/thumbnail-12.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-13.png">
+                    <img src="../../images/thumbnail-13.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-14.png">
+                    <img src="../../images/thumbnail-14.png" alt="thumbnail">
+                </a>
+            </li>
+            <li>
+                <a href="../../images/slide-15.png">
+                    <img src="../../images/thumbnail-15.png" alt="thumbnail">
+                </a>
+            </li>
+        </ul> <!-- /#gallery -->
+    </div> <!-- /.gray-box -->
+</body>
+</html>
