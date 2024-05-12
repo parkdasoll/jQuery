@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - animate method</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #buttons {
+            width: max-content;
+            margin: 0 auto;
+            margin-bottom: 1em;
+        }
+        #buttons > button {
+            font-size: 1em;
+        }
+        #box{
+            width: 200px;
+            height: 200px;
+            background-color: yellowgreen;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        $(function(){
+            // animate 메서드
+            //  - 애니메이션 효과를 적용하기 위한 메서드
+            //      = 사용자 지정 효과를 만들기 위한 메서드
+            //  - 모든 스타일 속성을 다룰 수 없고
+            //    속성 값이 숫자인 속성을 다룬다.
+            //  - 스타일 속성 외의 다른 속성들도 사용될 수 있다.
+            //      ex) scrollTop, scrollLeft 
+            //  - 형태
+            //      .animate(propertes [,duration] [,complete])
+
+            $("#hello1").on("click", function() {
+                $(this).animate({
+                    // CSS Style Propertes
+                    width:200,
+                    height:200
+                }, 1000, function(){
+                    // 시각 효과가 끝난 다음 수행할 함수
+                    // 즉, 시각 효과가 시작하고 1000ms 뒤에 수행된다.
+
+                    $(this).html(this.innerHTML + "<br>complete!");
+                });
+            });
+
+            //--------------------------------------------------------------
+            $("#hello2").on("click", function(){
+                // $(this).animate({
+                //     width:200,
+                //     height:200
+                // }, 500);
+                // → 너비와 높이가 동시에 변한다.
+                // → 하나의 프레임
+
+                // 두 개 이상의 프레임을 다룰려면
+                // animate 메서드를 프레임의 수만큼 호출하면 된다.
+                //  → 다음에 진행할 시각 효과를 complete 인자로
+                //    함수를 전달할 필요 없이 메서드 체이닝으로
+                //    차례대로 수행하게끔 작성하면 된다.
+                $(this)
+                    .animate({width:200}, 1000)
+                    // → px 단위 생략
+                    .animate({height:"+=200"}, 1000)
+                    // → 복합 대입 연산자를 통해 기존 속성 값에서 연산이 가능
+                    .fadeOut(1000)
+                    // → 저수준 시각 효과 메서드도 시각 효과 메서드 중 하나이기 때문에
+                    //   .animate 메서드와 동시에 수행되지 않고 차례대로 수행된다.
+                    .slideDown(1000)
+                    .animate({backgroundColor:"yellowgreen"}, 5000)
+                    // → 색상과 같이 숫자 형태가 아닌 속성들은 적용되지 않는다.
+                    // → 적용되지 않는 속성이 있어도 효과 자체가 무시되지는 않기 때문에
+                    //   지정된 시간 동안에는 다음 효과가 진행하지 않는다.
+                    .css({backgroundColor:"gold", color:"navy"})
+                    // → css 메서드는 시각 효과 메서드가 아니기 때문에
+                    //   메서드가 호출되자마자 적용된다.
+                    // .fadeOut(1000);
+            });
+            //---------------------------------------------------------------------
+            var $box = $("#box");
+            $("#left").on("click", function(){
+                // #box 요소가 애니메이션 효과 진행 중이면
+                // 핸들러를 종료시켜 중복으로 수행되지 않도록 한다.
+                if($box.is(":animated")) return;
+
+                $box.animate({marginLeft:"-=50"});
+            });
+            $("#right").on("click", function(){
+                $box.animate({marginLeft:"+=50"});
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h1 id="hello1" class="gray-box">Hello World!</h1>
+    <h1 id="hello2" class="gray-box">Hello World!</h1>
+    <hr>
+    <div id="buttons" class="graybox">
+        <button id="left">&laquo;</button>
+        <button id="right">&raquo;</button>
+    </div>
+    <div id="box"></div>
+</body>
+</html>

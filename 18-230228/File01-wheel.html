@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - wheel event</title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <script>
+        $(function() { 
+            
+            // wheel 이벤트
+            //  - 마우스 휠을 굴릴 때 발생하는 이벤트
+            //  - wheel 자체가 스크롤을 하기 위한 하드웨어이기 때문에
+            //    기본 이벤트가 스크롤 이벤트이다.
+            //     → wheel 이벤트의 기본 이벤트 자체가 패시브 기능
+            //     → 기본 이벤트를 일반적인 방법으로는 제거할 수 없다.
+            //        : passvie 상태를 해제해야 기본 이벤트를 제거할 수 있다.
+
+            // wheel 이벤트의 기본 이벤트 제거
+            function removeDefaultEvent(event) {
+                event.preventDefault();
+            }
+            window.addEventListener("wheel", removeDefaultEvent, {passive:false});
+
+            $(window).on("click", function() { 
+                // 클릭하면 다시 스크롤이 되어지도록 
+                // 기본 이벤트를 활성화
+                //  → 기본 이벤트를 제거한 핸들러를 제거
+                //  → 핸들러를 제거하려면 등록된 핸들러가 일반 함수여야한다.
+                
+                window.removeEventListener("wheel", removeDefaultEvent);
+            });
+
+
+
+            $(window).on("wheel", function(event) { 
+                console.log("wheel event!");
+
+                // 휠의 회전 방향을 알아내기 위해서는
+                //  JavaScript 에서의 이벤트 객체의 deltaY 속성을 이용
+                //   JavaScript 에서의 이벤트 객체 = event.originalEvent
+                console.log("delta = " + event.originalEvent.deltaY);
+                // 양수 : 휠을 아래로 굴린 경우
+                // 음수 : 휠을 위로 굴린 경우
+
+                // event.preventDefault();
+
+                // 원하는 만큼 스크롤 이동
+                // if($("html").is(":animated")) return;
+                // if(event.originalEvent.deltaY > 0)
+                //     $("html").animate({scrollTop:"+=500"});
+                // else
+                //     $("html").animate({scrollTop:"-=500"});
+
+            });
+
+
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example01 - Fixed Navigation </title>
+    <link rel="stylesheet" href="../../CSS/reset.css">
+    <link rel="stylesheet" href="../../CSS/dark.css">
+    <script src="../../Js/jQuery.js"></script>
+    <style>
+        #header, #nav > ul, #content {
+            width: 1200px;
+            margin: 0 auto;
+        }
+        #header > h1 {
+            font-size: 2.4em;
+            font-weight: bold;
+            padding: 0.5em 1em;
+            text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+        }
+        #nav::after{content: ""; display: block; clear: both;}
+        #nav {
+            background-color: #444;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4);
+            margin-bottom: 16px;
+        }
+        #nav.fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+        #nav > ul > li {
+            float: left;
+        }
+        #nav > ul > li > a {
+            display: block;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            color: inherit;
+        }
+        #nav > ul > li > a:hover {
+            background-color: yellowgreen;
+            color: navy;
+        }
+        #content {
+            padding: 0 1em;
+        }
+        #content > h2 {
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+        #content > p {
+            margin-bottom: 1em;
+        }
+    </style>
+    <script>
+        $(function() {
+            var $window = $(window);
+            var $nav = $("#nav");
+            var $content = $("#content");
+            // #nav 요소의 위치
+            var navOffsetTop = $nav.offset().top;
+            // #nav 요소의 높이
+            var navHeight = $nav.outerHeight(true);
+
+            $window.on("scroll", function(){
+
+                if($window.scrollTop() > navOffsetTop) {
+                    $nav.addClass("fixed");
+                    $content.css({marginTop:navHeight});
+                }
+                else {
+                    $nav.removeClass("fixed");
+                    $content.removeAttr("style");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header id="header">
+        <h1>Fixed Navigation Bar</h1>
+    </header>
+    <nav id="nav">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#html">HTML</a></li>
+            <li><a href="#css">CSS</a></li>
+            <li><a href="#javascript">JavaScript</a></li>
+            <li><a href="#jqurey">jQuery</a></li>
+        </ul>
+    </nav>
+    <article id="content">
+        <h2>What is Lorem Ipsum?</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc posuere luctus nulla eget consequat. Donec imperdiet
+                faucibus enim, vitae semper ex tempor ac. Curabitur eget massa a metus euismod ultrices. Cras sagittis ipsum in ex
+                fermentum tincidunt. Morbi tempus libero in ipsum pulvinar vehicula. Proin blandit tellus id elit sodales tempus. In
+                auctor odio et tellus pulvinar molestie. Suspendisse interdum non ipsum sed volutpat. Aliquam luctus arcu viverra
+                faucibus sodales. Ut varius ultrices ipsum quis tincidunt. Vestibulum et sapien sed mauris vestibulum consectetur.
+                Mauris risus eros, maximus at laoreet sed, accumsan sit amet dolor. Sed ac convallis mauris. Quisque elit turpis,
+                efficitur a sodales sed, aliquam eu dolor. Vivamus bibendum, ipsum sed fermentum efficitur, nisl ante maximus eros,
+                eget sodales diam lacus sed odio. Pellentesque pellentesque feugiat erat, ut bibendum lacus mattis et.</p>
+
+            <p>Pellentesque augue nulla, malesuada vestibulum lorem vitae, sollicitudin feugiat turpis. In lacinia lacus a sapien
+                suscipit faucibus. Nunc eleifend varius mauris eget ullamcorper. Sed ut diam vestibulum, finibus nunc id, feugiat
+                nibh. Praesent eu mauris quis tortor suscipit euismod a quis mauris. Nunc sit amet tincidunt sapien. Aenean quis
+                elementum diam. Duis ac ultricies felis. Curabitur quis facilisis leo, semper aliquam ex. Ut sollicitudin, nisi eu
+                pharetra vestibulum, magna magna mollis diam, ut hendrerit erat ante vel dolor. Morbi vitae feugiat nibh. Duis in
+                enim venenatis ligula mollis consectetur ut tincidunt metus. Cras vulputate lobortis aliquet. Duis pellentesque
+                accumsan massa, elementum condimentum erat efficitur eget. Mauris ac lacus sed felis venenatis sollicitudin ut ut
+                nisl. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+
+            <p>Quisque justo augue, vulputate nec urna sed, mattis iaculis nunc. Quisque vitae dolor congue nisl scelerisque porta
+                sed non tellus. Proin suscipit suscipit elementum. Aenean fringilla, velit ac accumsan tristique, magna justo
+                iaculis nisi, at ullamcorper nunc lectus et nunc. Sed a facilisis orci, rutrum hendrerit augue. Curabitur semper
+                eros nec luctus venenatis. Nullam malesuada tellus eget leo sagittis tempor. Sed id pretium ex. Aenean aliquam
+                lectus vel feugiat consequat. Mauris iaculis finibus lectus sed condimentum. Maecenas felis magna, condimentum id
+                iaculis eget, dignissim ac nunc. Fusce euismod, dolor ut gravida finibus, tellus velit dapibus quam, ut vulputate
+                libero est eu mauris. Curabitur ut vulputate est. Ut in enim lacus. Phasellus mauris nunc, sodales in orci vitae,
+                vulputate egestas lacus.</p>
+
+            <p>Vivamus urna justo, rutrum pharetra aliquet ut, dictum nec lectus. Maecenas viverra porta nibh, pharetra facilisis
+                tortor maximus at. Aliquam faucibus hendrerit lectus. Proin non augue tincidunt, blandit ante quis, sodales lorem.
+                Curabitur ac nibh sollicitudin, feugiat mauris rutrum, vehicula tortor. Vivamus non pharetra augue. Donec vel velit
+                tincidunt tellus cursus molestie in et est. Cras at ipsum et ex vulputate gravida eget eget ligula. Phasellus
+                pretium, quam nec convallis faucibus, mi nisi tristique nibh, vitae sagittis turpis purus nec justo. Duis
+                consectetur eu lorem id euismod. Pellentesque tincidunt elementum enim, ac elementum nibh dignissim et. Nunc tempus
+                ultricies molestie. Mauris id ultricies magna, non condimentum lacus. Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Morbi porttitor augue aliquet metus mollis placerat.</p>
+
+            <p>Praesent dolor mauris, fermentum sit amet sem vitae, ultrices tincidunt risus. Ut vehicula quis augue nec
+                scelerisque. In non turpis vel eros finibus congue. Pellentesque habitant morbi tristique senectus et netus et
+                malesuada fames ac turpis egestas. Etiam dui purus, fringilla quis erat vitae, tempus congue ipsum. Cras molestie,
+                tortor eget placerat lobortis, mauris arcu aliquet sapien, id pharetra dui magna a leo. Nunc tincidunt laoreet
+                commodo. Ut interdum neque imperdiet odio sodales, vitae pretium mauris vehicula. Curabitur sollicitudin libero
+                arcu, pulvinar mollis nulla eleifend non. Curabitur tincidunt enim at ipsum iaculis blandit. Mauris at finibus mi.
+            </p>
+
+    </article>
+</body>
+</html>
